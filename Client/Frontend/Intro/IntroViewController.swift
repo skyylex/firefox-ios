@@ -162,6 +162,7 @@ class IntroViewController: UIViewController, UIScrollViewDelegate {
         signInButton.setTitleColor(UIColor.white, for: UIControlState())
         signInButton.layer.cornerRadius = IntroViewControllerUX.SignInButtonCornerRadius
         signInButton.clipsToBounds = true
+        signInButton.accessibilityIdentifier = "IntroViewController.signInButton"
         signInButton.addTarget(self, action: #selector(IntroViewController.SELlogin), for: UIControlEvents.touchUpInside)
         signInButton.snp.makeConstraints { (make) -> Void in
             make.height.equalTo(IntroViewControllerUX.SignInButtonHeight)

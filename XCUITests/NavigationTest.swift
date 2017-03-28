@@ -57,6 +57,7 @@ class NavigationTest: BaseTestCase {
 
     func testTapSignInShowsFxAFromTour() {
         navigator.goto(SettingsScreen)
+
         // Open FxAccount from tour option in settings menu and go throughout all the screens there
         // Tour's first screen Organize
         navigator.goto(Intro_Organize)
@@ -162,12 +163,12 @@ class NavigationTest: BaseTestCase {
         navigator.openURL(urlString: urlAddOns)
 
         // Mobile view by default, desktop view should be available
-        navigator.changeBrowserView(view: "RequestDesktopMenuItem")
+        navigator.changeBrowserView(view: BrowserMenuChoice.Desktop.rawValue)
         checkDesktopView()
 
         // From desktop view it is posible to change to mobile view again
         navigator.nowAt(BrowserTab)
-        navigator.changeBrowserView(view: "RequestMobileMenuItem")
+        navigator.changeBrowserView(view: BrowserMenuChoice.Mobile.rawValue)
 
         checkMobileView()
     }
@@ -177,7 +178,7 @@ class NavigationTest: BaseTestCase {
         navigator.openURL(urlString: urlAddOns)
 
         // Mobile view by default, desktop view should be available
-        navigator.changeBrowserView(view: "RequestDesktopMenuItem")
+        navigator.changeBrowserView(view: BrowserMenuChoice.Desktop.rawValue)
         checkDesktopView()
 
         // Select any link to navigate to another site and check if the view is kept in desktop view
@@ -191,7 +192,7 @@ class NavigationTest: BaseTestCase {
         navigator.openURL(urlString: urlAddOns)
 
         // Mobile view by default, desktop view should be available
-        navigator.changeBrowserView(view: "RequestDesktopMenuItem")
+        navigator.changeBrowserView(view: BrowserMenuChoice.Desktop.rawValue)
 
         // After reloading a website the desktop view should be kept
         app.buttons["Reload"].tap()
@@ -200,7 +201,7 @@ class NavigationTest: BaseTestCase {
 
         // From desktop view it is posible to change to mobile view again
         navigator.nowAt(BrowserTab)
-        navigator.changeBrowserView(view: "RequestMobileMenuItem")
+        navigator.changeBrowserView(view: BrowserMenuChoice.Mobile.rawValue)
         waitForValueContains(app.textFields["url"], value: urlAddOns)
 
         // After reloading a website the mobile view should be kept

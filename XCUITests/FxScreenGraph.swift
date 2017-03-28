@@ -100,7 +100,7 @@ func createScreenGraph(_ app: XCUIApplication, url: String = "https://www.mozill
             }
 
             scene.tap(startBrowsingButton, to: NewTabScreen)
-            scene.tap(app.buttons["Sign in to Firefox"], to: FxSyncLogin)
+            scene.tap(app.buttons["IntroViewController.signInButton"], to: FxSyncLogin)
         }
 
         i += 1
@@ -180,7 +180,7 @@ func createScreenGraph(_ app: XCUIApplication, url: String = "https://www.mozill
         scene.tap(table.cells["Logins"], to: LoginsSettings)
         scene.tap(table.cells["ClearPrivateData"], to: ClearPrivateDataSettings)
         scene.tap(table.cells["OpenWith.Setting"], to: OpenWithSettings)
-        scene.tap(table.cells["Show Tour"], to: Intro_Organize)
+        scene.tap(table.cells["ShowTour"], to: Intro_Organize)
 
         scene.backAction = navigationControllerBackAction
     }
@@ -347,4 +347,8 @@ extension Navigator {
         let app = XCUIApplication()
         app.collectionViews.cells[view].tap()
     }
+}
+enum BrowserMenuChoice: String {
+    case Desktop = "RequestDesktopMenuItem"
+    case Mobile = "RequestMobileMenuItem"
 }
