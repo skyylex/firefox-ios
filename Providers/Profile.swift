@@ -667,7 +667,22 @@ open class BrowserProfile: Profile {
         }
 
         fileprivate func reportSyncPingForResult(opResult: SyncOperationResult) {
-            // TODO: Send sync report to telemetry client for storage/sending
+            guard let stats = opResult.stats,
+                  let engineResults = opResult.engineResults.successValue else {
+                log.warning("No stats session created for sync operation!")
+                return
+            }
+
+            let onlyComplete: (EngineIdentifier, SyncStatus) -> SyncEngineStatsSession? = { _, syncStatus in
+                switch syncStatus {
+                case .completed(let stats): return stats
+                default: return nil
+                }
+            }
+
+            let engineStats: [SyncEngineStatsSession] = engineResults.flatMap(onlyComplete)
+            let syncPing = SyncPing(opStats: stats, engineStats: engineStats)
+            Telemetry.sendPing(syncPing)
         }
 
         fileprivate func reportAdHocEndSyncingStatus(displayState: SyncDisplayState?, engineResults: Maybe<EngineResults>?) {
