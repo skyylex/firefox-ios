@@ -22,6 +22,7 @@ class SettingsTest: BaseTestCase {
         navigator.goto(SettingsScreen)
         let appsettingstableviewcontrollerTableviewTable = app.tables["AppSettingsTableViewController.tableView"]
         appsettingstableviewcontrollerTableviewTable.staticTexts["Save Logins"].swipeUp()
+        waitforExistence(appsettingstableviewcontrollerTableviewTable.staticTexts["Help"])
         appsettingstableviewcontrollerTableviewTable.staticTexts["Help"].tap()
 
         waitForValueContains(app.textFields["url"], value: "support.mozilla.org")
