@@ -5,6 +5,8 @@
 import Foundation
 import Shared
 import Account
+import SwiftyJSON
+import Telemetry
 
 fileprivate let log = Logger.syncLogger
 
@@ -15,6 +17,12 @@ public enum SyncReason: String {
     case user = "user"
     case syncNow = "syncNow"
     case didLogin = "didLogin"
+}
+
+public enum SyncPingReason: String {
+    case shutdown = "shutdown"
+    case schedule = "schedule"
+    case idChanged = "idchanged"
 }
 
 public protocol Stats {
@@ -39,10 +47,10 @@ public struct SyncDownloadStats: Stats {
 
     public func hasData() -> Bool {
         return applied > 0 ||
-               succeeded > 0 ||
-               failed > 0 ||
-               newFailed > 0 ||
-               reconciled > 0
+            succeeded > 0 ||
+            failed > 0 ||
+            newFailed > 0 ||
+            reconciled > 0
     }
 }
 
@@ -121,5 +129,37 @@ public class SyncOperationStatsSession: StatsSession {
         self.uid = uid
         self.deviceID = deviceID
         self.didLogin = (why == .didLogin)
+    }
+}
+
+extension SyncOperationStatsSession: DictionaryRepresentable {
+    func asDictionary() -> [String : Any] {
+        let whenValue = when ?? 0
+        return [
+            "when": whenValue,
+            "took": took,
+            "didLogin": didLogin,
+            "why": why.rawValue
+        ]
+    }
+}
+
+public struct SyncPing: TelemetryPing {
+    public var payload: JSON
+
+    public init(opStats: SyncOperationStatsSession, engineStats: [SyncEngineStatsSession]) {
+        var ping: [String: Any] = [
+            "version": 1,
+            "discarded": 0,
+            "why": SyncPingReason.schedule.rawValue,
+            "uid": "testUID",
+            "deviceID": "testDeviceID"
+        ]
+
+        var syncOp = opStats.asDictionary()
+        syncOp["engines"] = engineStats.map { $0.asDictionary() }
+        ping["syncs"] = [syncOp]
+        
+        payload = JSON(ping)
     }
 }
