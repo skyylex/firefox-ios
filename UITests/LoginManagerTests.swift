@@ -27,9 +27,20 @@ class LoginManagerTests: KIFTestCase {
     }
 
     fileprivate func openLoginManager() {
+        // Wait until the dialog shows up
+        let menuAppeared = GREYCondition(name: "Wait the Settings dialog to appear", block: { () -> Bool in
+            var errorOrNil: NSError?
+            EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("Logins")).assert(grey_notNil(), error: &errorOrNil)
+            let success = errorOrNil == nil
+            return success
+        })
+        
         EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("Show Tabs")).perform(grey_tap())
         EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("Menu")).perform(grey_tap())
         EarlGrey.select(elementWithMatcher: grey_accessibilityID("menu-Settings")).perform(grey_tap())
+        let success = menuAppeared?.wait(withTimeout: 20)
+        GREYAssertTrue(success!, reason: "Failed to display settings dialog")
+        
         EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("Logins")).perform(grey_tap())
     }
 
