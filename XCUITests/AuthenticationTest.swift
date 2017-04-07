@@ -111,7 +111,7 @@ class AuthenticationTest: BaseTestCase {
         
         //send app to background, and re-enter
         XCUIDevice.shared().press(.home)
-        springboard.scrollViews.otherElements.icons["Nightly"].tap()
+        springboard.scrollViews.otherElements.icons["Nightly"].doubleTap()
         
         navigator.nowAt("SettingsScreen")
         navigator.goto(LoginsSettings)
@@ -129,7 +129,7 @@ class AuthenticationTest: BaseTestCase {
         
         //send app to background, and re-enter
         XCUIDevice.shared().press(.home)
-        springboard.scrollViews.otherElements.icons["Nightly"].tap()
+        springboard.scrollViews.otherElements.icons["Nightly"].doubleTap()
         
         navigator.nowAt("SettingsScreen")
         navigator.goto(LoginsSettings)
